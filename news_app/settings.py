@@ -39,8 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Add ons
+    'crispy_forms',
+    'crispy_bootstrap5',
+
     # Apps
     'home',
+    'profiles',
 ]
 
 MIDDLEWARE = [
@@ -138,3 +143,29 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+# Email configuration
+
+# To print emails locally in console
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
+
+# Gmail not supporting less secure apps from may 2022
+# EMAIL_USE_TLS = True
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'newswebapp5000@gmail.com'
+# EMAIL_HOST_PASSWORD = 'django2022'
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+#CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+#CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+# To  store profile images
+import os
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'

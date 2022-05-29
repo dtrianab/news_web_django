@@ -15,15 +15,23 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from home import views #> to be added with include
-from home.views import home, AboutView
-from django.views.generic.base import TemplateView # new
+from django.conf import settings
+from django.conf.urls.static import static
 
+# Import from home app
+from home.views import homeView
+from django.views.generic.base import TemplateView # new
+from profiles import views as profiles_views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
+    path("", homeView.as_view(), name="home_page"),
+    path('register/', profiles_views.register, name="register"),
+    path('login/', auth_views.LoginView.as_view(template_name="profiles/login.html"), name="login"),
+    path('logout/', auth_views.LogoutView.as_view(template_name="profiles/logout.html"), name="logout"),
     path('admin/', admin.site.urls),
-    path('', home.as_view()),
-    #path("accounts/", include("django.contrib.auth.urls")),
-    #path('', TemplateView.as_view(template_name='home.html'), name='home'), # new
-    path('about/', AboutView.as_view()),
+  
 ]
+
+#Do note that this is not the preferred way of serving files in production.
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
