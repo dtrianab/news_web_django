@@ -35,7 +35,8 @@ test_user_001
 2JNyBf99UL@Urpe
 
 
-xE77.hMt#!MNHhC
+dtriana
+USYzKRep!TP!4aZ
 
 
 pip install --upgrade django-crispy-forms
