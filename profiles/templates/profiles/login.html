@@ -1,4 +1,4 @@
-{% extends "profiles/base.html" %}
+{% extends "news_app/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
 
@@ -12,6 +12,11 @@
     </div>
 </div>
 
+<div>
+    <br></br> 
+    <br></br>
+</div>
+
 <div class="container bg-light mt-n5 p-5 rounded ">
     <div class="row">
         <div class="col-12">
@@ -21,7 +26,7 @@
                 <div class="form-group">
                     <button class="btn btn-outline-dark">Submit</button>
                 </div>
-                <a href="{% url 'register'  %}">Register?</a>
+                <a href="{% url 'register'  %}">Register</a>
                 <a href="#">Forgot Password?</a>
             </form>
             
