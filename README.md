@@ -17,6 +17,8 @@
 - profiles App
     
 
+
+
 Linode     
 #Alejo1991tb
 
@@ -40,3 +42,7 @@ USYzKRep!TP!4aZ
 
 
 pip install --upgrade django-crispy-forms
+
+```SQL
+DELETE FROM django_migrations WHERE app = 'stockMarket'
+```

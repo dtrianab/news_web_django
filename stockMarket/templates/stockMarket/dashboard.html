@@ -1,0 +1,14 @@
+{% extends "news_app/base.html" %}
+
+<!-- Date title -->
+{% block title %}Stock Market Page{% endblock %}
+
+<!-- Date Block -->
+{% block content %}
+    Wlcome to SM {{ user_in_stock }} Today is {{ date_now }}, you have tikcers: {{ p }}
+   
+    <a href="{% url 'addticker' %}" class="btn btn-sm btn-primary">Add Ticker</a>
+
+
+
+{% endblock content %}

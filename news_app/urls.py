@@ -13,16 +13,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic.base import TemplateView 
 
-# Import from home app
-from home.views import homeView
-from django.views.generic.base import TemplateView # new
-from profiles import views as profiles_views
+# Auth Imports
+from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required
+
+
+# App Imports 
+from home.views import homeView
+from stockMarket import views as stockMarket_views
+from profiles import views as profiles_views
 
 urlpatterns = [
     path("", homeView.as_view(), name="home_page"),
@@ -40,6 +45,15 @@ urlpatterns = [
     path('password-reset/done', auth_views.PasswordResetDoneView.as_view(template_name="profiles/password_reset_done.html"), name="password_reset_done"),
     path('password-reset/complete', auth_views.PasswordResetCompleteView.as_view(template_name="profiles/password_reset_complete.html"), name="password_reset_complete"),
     
+
+    #stockMarket
+    #path('stocks-dashboard/', stockMarket_views.stocksdashboard, name="stocks-dashboard"),
+    path("stocks-dashboard/", login_required(stockMarket_views.stocksdashboard.as_view()), name="stocks-dashboard"),
+    path("addticker/", login_required(stockMarket_views.addticker.as_view()), name="addticker"),
+
+
+    #News
+
     # Admin
     path('admin/', admin.site.urls),
   

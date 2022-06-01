@@ -42,10 +42,12 @@ INSTALLED_APPS = [
     # Add ons
     'crispy_forms',
     'crispy_bootstrap5',
+    'django.contrib.postgres',
 
     # Apps
     'home',
     'profiles',
+    'stockMarket',
 ]
 
 MIDDLEWARE = [

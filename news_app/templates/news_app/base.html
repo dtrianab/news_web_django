@@ -20,7 +20,13 @@
               <a class="nav-link" href="{% url 'home_page' %}">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Dashboard</a>
+              <a class="nav-link" href="#">News Dashboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'stocks-dashboard' %}">Stock Market</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Bots</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -46,13 +52,25 @@
           {% else %}
             <a href="{% url 'login' %}">Log In&nbsp&nbsp</a>
             <a href="{% url 'register' %}">SignUp&nbsp&nbsp</a>
-            <a href="{% url 'password_reset' %}">>Forgot Password?</a>
+            <a href="{% url 'password_reset' %}">Forgot Password?</a>
           {% endif %}
           {% endblock user_home %}
         </div>
       </nav>
-
     <!-- Optional Javascript -->
     {% block content %} {% endblock content %}
+
+
+    {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show custom-alert" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    {% endfor %}
+  {% endif %}
+   
   </body>
 </html>
