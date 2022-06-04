@@ -49,7 +49,9 @@ urlpatterns = [
     #stockMarket
     #path('stocks-dashboard/', stockMarket_views.stocksdashboard, name="stocks-dashboard"),
     path("stocks-dashboard/", login_required(stockMarket_views.stocksdashboard.as_view()), name="stocks-dashboard"),
+    path("addportafolio/", login_required(stockMarket_views.addportafolio.as_view()), name="addportafolio"),
     path("addticker/", login_required(stockMarket_views.addticker.as_view()), name="addticker"),
+    path("portafolio/<int:pk>", login_required(stockMarket_views.displayPortafolio.as_view()), name="portafolio"),
 
 
     #News

@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     'crispy_bootstrap5',
     'django.contrib.postgres',
+    'django_tables2',
+    'yfinance',
 
     # Apps
     'home',
