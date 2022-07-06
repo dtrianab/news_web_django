@@ -52,6 +52,7 @@ urlpatterns = [
     path("addportafolio/", login_required(stockMarket_views.addportafolio.as_view()), name="addportafolio"),
     path("addticker/", login_required(stockMarket_views.addticker.as_view()), name="addticker"),
     path("portafolio/<int:pk>", login_required(stockMarket_views.displayPortafolio.as_view()), name="portafolio"),
+    path("stock/<int:pk>", login_required(stockMarket_views.displayStock.as_view()), name="stock"),
 
 
     #News

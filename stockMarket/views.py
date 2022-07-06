@@ -1,3 +1,4 @@
+from logging import exception
 from unicodedata import name
 from django.contrib import messages
 from django.views.generic import TemplateView, FormView 
@@ -6,6 +7,12 @@ from .forms import RegisterPortafolio, RegisterTicker
 from datetime import datetime   
 from django.db.models.expressions import Func
 from yfinance import Ticker 
+
+from django.shortcuts import render
+from django.urls import reverse
+from django.shortcuts import redirect
+
+
 
 # Create your views here.
 
@@ -32,7 +39,7 @@ class stocksdashboard(TemplateView):
 
 class addportafolio(FormView):
     template_name = "stockMarket/addportafolio.html"
-    #success_url="stocks-dashboard/"
+    success_url="stocks-dashboard/"
     form_class = RegisterPortafolio
     def get(self, request, *args, **kwargs):
         form_class = self.get_form_class()
@@ -65,19 +72,21 @@ class addportafolio(FormView):
         #form.save()    
         P_user = Portafolio.objects.filter(user = self.request.user)
         P_user_names = P_user.values_list('name')
-        if P_user.count() != 0:
-            if val in str(P_user_names):
-                messages.success(self.request, 'Portafolio name:'+ str(val) +' is already existing.')
-                return self.render_to_response(context)
+        if val in str(P_user_names):
+            messages.success(self.request, 'Portafolio name:'+ str(val) +' is already existing.')
+            return self.render_to_response(context)
         else:
+            messages.success(self.request, 'Adding new Portafolio')    
             form_new = Portafolio()   
             form_new.user = self.request.user
             form_new.name = val
             form_new.country = self.request.POST.get('country')
             form_new.save() 
             messages.success(self.request, 'Portafolio: ' + val + ' stored') # ignored
-            return self.render_to_response(context)
-
+            #return render(self.request, "stockMarket/dashboard.html", {"user": self.request.user})    
+            #return reverse('stocks-dashboard')
+            return redirect('stocks-dashboard')
+        
 class addticker(FormView):
 
     template_name = "stockMarket/addTicker.html"  
@@ -108,17 +117,24 @@ class addticker(FormView):
     def form_valid(self, form, **kwargs):
         context = self.get_context_data(**kwargs)
         context['form'] = form
-        #check if ticker exitsts
         val = self.request.POST.get('tag')
-        #ticker exists? valid ? 
+        #Check if ticker exists in DB 
         if Stock.objects.filter(ticker=val).first() == None :
-            new_ticker = Ticker(val)
-            messages.success(self.request, 'Ticker' + new_ticker.info['shortName'] + ' not existing') # ignored
+            try:
+                # Try to find ticker in Yahoo finance
+                new_ticker = Ticker(val)
+                new_stock = Stock(ticker = val, name=new_ticker.info['shortName'])
+                new_stock.save()
+                Portafolio.objects.filter(user = self.request.user).update(userStock = new_stock)
+                messages.success(self.request, 'Ticker' + new_ticker.info['shortName'] + ' added') # ignored
+            except: 
+                messages.error(self.request, 'Can not find ticker '+ val +' at Yahoo Finance') # ignored   
         else:
-            messages.success(self.request, 'Ticker' + val ) # ignored    
-        
-        #in Portafolio?
-        #messages.success(self.request, 'Ticker' + val + ' already in Portafolio') # ignored
+            # Ticker already in DB
+            val_stock = Stock.objects.filter(ticker = val).first()
+            P = Portafolio.objects.filter(user = self.request.user).first()
+            P.userStock.add(val_stock.id)
+            messages.success(self.request, 'Ticker '+ val  +' already existing in DB. Added to Portafolio'  ) # ignored    
         return self.render_to_response(context)
 
 class displayPortafolio(TemplateView):
@@ -128,9 +144,30 @@ class displayPortafolio(TemplateView):
         pk_sel = context['pk']
         P = Portafolio.objects.filter(pk=pk_sel).first()
         pname = P.name
+        s = P.userStock.all()
         context.update(
             {
              'pname': pname,
+             's': s
              }
         )
+        return context  
+
+class displayStock(TemplateView):
+    template_name = "stockMarket/stock.html"
+    def get_context_data(self, **kwargs): 
+        context = super(displayStock, self).get_context_data(**kwargs)
+        # pk_sel = context['pk']
+        # P = Portafolio.objects.filter(pk=pk_sel).first()
+        # pname = P.name
+        
+        # s = P.userStock.all()
+        
+
+        # context.update(
+        #     {
+        #      'pname': pname,
+        #      's': s
+        #      }
+        # )
         return context  

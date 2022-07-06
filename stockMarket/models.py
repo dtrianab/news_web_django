@@ -13,7 +13,7 @@ class Stock(models.Model):
     ## others      
 
 class Portafolio(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default='')
     name = models.CharField(max_length=200)
     country = CountryField(default='Select Country')
     userStock = models.ManyToManyField(Stock)
